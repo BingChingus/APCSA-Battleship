@@ -1,6 +1,11 @@
 public class Board 
 {
-    private boolean[][] board = new String[8][8];
+    private boolean[][] board = new boolean[8][8];
+    int fiveBoat = 5;
+    int fourBoat = 4;
+    int threeBoat1 = 3;
+    int threeBoat2 = 3;
+    int twoBoat = 2;
 
     public Board()
     {
@@ -11,6 +16,12 @@ public class Board
                 board[i][j] = false;
             }
         }
+
+        placeBoats(fiveBoat);
+        placeBoats(fourBoat);
+        placeBoats(threeBoat1);
+        placeBoats(threeBoat2);
+        placeBoats(twoBoat);
 
         /* test for string board
         for (int i = 0; i < board.length; i++)
@@ -30,6 +41,64 @@ public class Board
         */
     }
 
+    public void placeBoats(int boat)
+    {
+        boolean placed = false;
+        int direction = (int) (Math.random() * 2 + 1); //1 = vertical, 2 = horizontal
+
+        if (direction == 1)
+        {
+            while(!placed)
+            {
+                boolean goodPlace = true;
+                int row = (int) (Math.random() * board.length);
+                int col = (int) (Math.random() * (board[0].length - boat - 1));
+                for(int i = col; i < boat + col; i++)
+                {
+                    if(board[row][i])
+                    {
+                        goodPlace = false;
+                    }
+                }
+
+                if(goodPlace)
+                {
+                    for(int i = col; i < boat + col; i++)
+                    {
+                        board[row][i] = true;
+                    }
+                    placed = true;
+                }
+            }
+        }
+
+        if (direction == 2)
+        {
+            while(!placed)
+            {
+                boolean goodPlace = true;
+                int row = (int) (Math.random() * (board.length - boat));
+                int col = (int) (Math.random() * (board[0].length - 1));
+                for(int i = row; i < boat + row; i++)
+                    {
+                        if(board[i][col])
+                        {
+                            goodPlace = false;
+                        }
+                    }
+
+                    if(goodPlace)
+                    {
+                        for(int i = row; i < boat + row; i++)
+                        {
+                            board[i][col] = true;
+                        }
+                        placed = true;
+                    }
+                }
+        }   
+    }
+
     public String toString()
     {
         
@@ -40,18 +109,23 @@ public class Board
             boardString += count + " ";
             for (int j = 0; j < board[0].length; j++)
             {
-                if (!b && j < 7)
+                if (!board[i][j] && j < 7)
                 {
                     boardString += "| ";
                 }
-                else if (!b && j == 7)
+                else if (!board[i][j] && j == 7)
                 {
                     boardString += "|";
+                }
+                else if (board[i][j] && j < 7)
+                {
+                    boardString += "|x";
                 }
             }
             boardString += "\n";
             count++;
         }
+        return boardString;
 
         /* test for string board
         for (String[] row : board)
@@ -69,7 +143,5 @@ public class Board
         return boardString;
         */
         //return null; //place holder
-
-        return boardString;
     }   
 }
