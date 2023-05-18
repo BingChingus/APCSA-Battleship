@@ -1,20 +1,26 @@
-public class Board 
+public class PlayerBoard
 {
-    private String[][] board = new String[8][8];
-    private boolean[][] boardBool = new boolean[8][8];
+    private String[][] playerBoard =  new String[8][8];
     int fiveBoat = 5;
     int fourBoat = 4;
     int threeBoat1 = 3;
     int threeBoat2 = 3;
     int twoBoat = 2;
 
-    public Board()
+    public PlayerBoard()
     {
-        for (int i = 0; i < boardBool.length; i++)
+        for (int i = 0; i < playerBoard.length; i++)
         {
-            for (int j = 0; j < boardBool[0].length; j++)
+            for (int j = 0; j < playerBoard[0].length; j++)
             {
-                boardBool[i][j] = false;
+                if (j == 7) //if the index is at the last column, don't add a space
+                {
+                    playerBoard[i][j] = "|";
+                }
+                else
+                {
+                    playerBoard[i][j] = "| ";
+                }
             }
         }
 
@@ -23,21 +29,6 @@ public class Board
         placeBoats(threeBoat1);
         placeBoats(threeBoat2);
         placeBoats(twoBoat);
-
-        for (int i = 0; i < board.length; i++)
-        {
-            for (int j = 0; j < board[0].length; j++)
-            {
-                if (j == 7) //if the index is at the last column, don't add a space
-                {
-                    board[i][j] = "|";
-                }
-                else
-                {
-                    board[i][j] = "| ";
-                }
-            }
-        }
     }
 
     public void placeBoats(int boat)
@@ -50,11 +41,11 @@ public class Board
             while(!placed)
             {
                 boolean goodPlace = true;
-                int row = (int) (Math.random() * board.length);
-                int col = (int) (Math.random() * (board[0].length - boat - 1));
+                int row = (int) (Math.random() * playerBoard.length);
+                int col = (int) (Math.random() * (playerBoard[0].length - boat - 1));
                 for(int i = col; i < boat + col; i++)
                 {
-                    if(board[row][i])
+                    if(playerBoard[row][i] != "| ")
                     {
                         goodPlace = false;
                     }
@@ -64,7 +55,7 @@ public class Board
                 {
                     for(int i = col; i < boat + col; i++)
                     {
-                        board[row][i] = true;
+                        playerBoard[row][i] = "|x";
                     }
                     placed = true;
                 }
@@ -76,11 +67,11 @@ public class Board
             while(!placed)
             {
                 boolean goodPlace = true;
-                int row = (int) (Math.random() * (board.length - boat));
-                int col = (int) (Math.random() * (board[0].length - 1));
+                int row = (int) (Math.random() * (playerBoard.length - boat));
+                int col = (int) (Math.random() * (playerBoard[0].length - 1));
                 for(int i = row; i < boat + row; i++)
                     {
-                        if(board[i][col])
+                        if(playerBoard[i][col] != "| ")
                         {
                             goodPlace = false;
                         }
@@ -90,7 +81,7 @@ public class Board
                     {
                         for(int i = row; i < boat + row; i++)
                         {
-                            board[i][col] = true;
+                            playerBoard[i][col] = "|x";
                         }
                         placed = true;
                     }
@@ -103,31 +94,7 @@ public class Board
         
         int count = 0;
         String boardString = "   0 1 2 3 4 5 6 \n";
-        for (int i = 0; i < board.length; i++)
-        {
-            boardString += count + " ";
-            for (int j = 0; j < board[0].length; j++)
-            {
-                if (!board[i][j] && j < 7)
-                {
-                    boardString += "| ";
-                }
-                else if (!board[i][j] && j == 7)
-                {
-                    boardString += "|";
-                }
-                else if (board[i][j] && j < 7)
-                {
-                    boardString += "|x";
-                }
-            }
-            boardString += "\n";
-            count++;
-        }
-        return boardString;
-
-        /* test for string board
-        for (String[] row : board)
+        for (String[] row : playerBoard)
         {
             boardString += count + " ";
             for (String s : row)
@@ -137,10 +104,7 @@ public class Board
             boardString += "\n";
             count++;
         }
-        boardString += "  ---------------";
 
         return boardString;
-        */
-        //return null; //place holder
-    }   
+    }
 }

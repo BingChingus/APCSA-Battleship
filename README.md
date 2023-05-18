@@ -1,2 +1,2 @@
 # APCSA-Battleship
-(WIP) Battleship final project for CSA (yay)
+Battleship final project for CSA (yay)

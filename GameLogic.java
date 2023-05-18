@@ -1,14 +1,18 @@
 public class GameLogic 
 {
-    private Board compboard;
+    private Board board;
+    private PlayerBoard playerBoard;
 
     public GameLogic()
     { 
-        compboard = new Board();
+        board = new Board();
+        playerBoard = new PlayerBoard();
     }
 
     public void play()
     {
-        System.out.println(compboard);
+        System.out.println(board);
+        System.out.println("  ---------------"); //board length is 17 chars
+        System.out.println(playerBoard);
     }
 }
