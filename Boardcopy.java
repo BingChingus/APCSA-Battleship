@@ -1,35 +1,24 @@
-public class Board 
+import java.util.Scanner;
+
+public class Boardcopy
 {
-    private String[][] board = new String[8][8];
-    private boolean[][] boardBool = new boolean[8][8];
+    private Scanner scan = new Scanner(System.in);
+    private Boat[][] board = new Boat[8][8];
+
+    int boatCount = 5;
     int fiveBoat = 5;
     int fourBoat = 4;
     int threeBoat1 = 3;
     int threeBoat2 = 3;
     int twoBoat = 2;
-
-    public Board()
+    
+    public Boardcopy()
     {
-        for (int i = 0; i < boardBool.length; i++)
-        {
-            for (int j = 0; j < boardBool[0].length; j++)
-            {
-                boardBool[i][j] = false;
-            }
-        }
-
         for (int i = 0; i < board.length; i++)
         {
             for (int j = 0; j < board[0].length; j++)
             {
-                if (j == 7) //if the index is at the last column, don't add a space
-                {
-                    board[i][j] = "|";
-                }
-                else
-                {
-                    board[i][j] = "| ";
-                }
+                board[i][j] = null;
             }
         }
 
@@ -54,7 +43,7 @@ public class Board
                 int col = (int) (Math.random() * (board[0].length - boat - 1));
                 for(int i = col; i < boat + col; i++)
                 {
-                    if(board[row][i] != "| ")
+                    if(board[row][i] != null)
                     {
                         goodPlace = false;
                     }
@@ -64,7 +53,7 @@ public class Board
                 {
                     for(int i = col; i < boat + col; i++)
                     {
-                        boardBool[row][i] = true;
+                        board[row][i] = new Boat(boat);
                     }
                     placed = true;
                 }
@@ -80,7 +69,7 @@ public class Board
                 int col = (int) (Math.random() * (board[0].length - 1));
                 for(int i = row; i < boat + row; i++)
                     {
-                        if(!board[i][col].equals("| "))
+                        if(board[i][col] != null)
                         {
                             goodPlace = false;
                         }
@@ -90,13 +79,38 @@ public class Board
                     {
                         for(int i = row; i < boat + row; i++)
                         {
-                            boardBool[i][col] = true;
+                            board[i][col] = new Boat(boat);
                         }
                         placed = true;
                     }
                 }
         }   
     }
+
+    public void guess()
+    {
+        int r = scan.nextInt();
+        int c = scan.nextInt();
+
+        if(board[r][c] != null)
+        {
+            for(Boat[] row : board)
+            {
+                for(Boat b : row)
+                {
+                    if(b != null && b.getBoatID() == board[r][c].getBoatID())
+                    {
+                        b.setBoatNum(b.getBoatNum() - 1);
+                    }
+                    else if(b != null && b.getBoatID() == board[r][c].getBoatID() && b.getBoatNum() == 0)
+                    {
+                        b.sink();
+                    }
+                }
+            }
+            board[r][c].hit();
+        }
+    }   
 
     public String toString()
     {
@@ -108,15 +122,19 @@ public class Board
             boardString += count + " ";
             for (int j = 0; j < board[0].length; j++)
             {
-                if (!boardBool[i][j] && j < 7)
+                if (board[i][j] == null && j < 7)
                 {
                     boardString += "| ";
                 }
-                else if (!boardBool[i][j] && j == 7)
+                else if (board[i][j] == null && j == 7)
                 {
                     boardString += "|";
                 }
-                else if (boardBool[i][j] && j < 7)
+                else if (board[i][j] != null && board[i][j].isHit())
+                {
+                    boardString += "|#";
+                }
+                else if (board[i][j] != null && j < 7)
                 {
                     boardString += "|x";
                 }
